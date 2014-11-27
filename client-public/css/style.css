@@ -17,3 +17,8 @@
 	display: block;
 
 }
+
+
+.Ranking ul li.last  {
+	color : red;
+}

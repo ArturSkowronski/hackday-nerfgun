@@ -19,7 +19,7 @@ var Devices = React.createClass({
 		_.each( this.state.devices , function (obj ,i ) {
 			items[i] = (	<li>{obj}</li>);
 		});
-		return (<div className="Devices panel panel-default  ">
+		return (<div className="Devices panel panel-default ">
 					<div className="panel-heading">Devices</div>
 					<ul>
 					{items}
@@ -57,7 +57,10 @@ var Ranking = React.createClass({
 								<div>{obj.result}</div>
 							</li>);
 		});
-		return (<div className="Ranking panel panel-default"><ul>{items}</ul> </div>);
+		return (<div className="Ranking panel panel-default ">
+			<div className="panel-heading">Results</div>
+			<ul>{items}</ul>
+		</div>);
 	}
 });
 
@@ -111,7 +114,7 @@ var Start = React.createClass({
 		var formClass =  [className, 'form'].join(" ");
 		var timerClassName =  [className2, 'timer'].join(" ");
 		var result =  [className2, 'Curren'].join(" ");
-		return (<div className="Start panel panel-default">
+		return (<div className="Start row">
 				<div className={formClass}>
 					<label>
 					    Name :
@@ -136,9 +139,14 @@ var App = React.createClass({
 	 },
 		render: function() {
 			return (<div>
-					 <Devices/>
+
+
 						<Start />
-						<Ranking/>
+				<div className="row">
+					<Devices  className="col-md-6" />
+					<Ranking  className="col-md-6"/>
+				</div>
+
 					</div>
 			);
 		}
