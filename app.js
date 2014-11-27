@@ -26,8 +26,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', routes);
 app.use('/users', users);
 
-//client side phones
+/// client side phones
 app.use('/static', express.static(__dirname + '/client-public'));
+
+/// sockets
+require('./app/sockets/sockets')(app);
 
 /// catch 404 and forward to error handler
 app.use(function(req, res, next) {
