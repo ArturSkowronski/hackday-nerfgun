@@ -75,8 +75,11 @@ exports.ping = function(socket, data) {
 	}
 }
 
-exports.getResult = function() {
-	return result;
+exports.sendResult = function() {
+	//send results to a server
+	serverDevice.emit('app:result', {
+		result: results
+	})
 }
 
 exports.stop = function() {

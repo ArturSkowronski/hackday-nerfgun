@@ -32,6 +32,10 @@ module.exports = function(app) {
 			controller.stop(data);
 		});
 
+		socket.on('app:getResult', function(data) {
+			controller.sendResult();
+		});
+
 		socket.on('disconnect', function(){
 			controller.removeDevice(socket.id);
 		});
