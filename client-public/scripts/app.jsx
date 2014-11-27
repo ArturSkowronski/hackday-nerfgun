@@ -19,7 +19,8 @@ var Devices = React.createClass({
 		_.each( this.state.devices , function (obj ,i ) {
 			items[i] = (	<li>{obj}</li>);
 		});
-		return (<div className="Devices">
+		return (<div className="Devices panel panel-default  ">
+					<div className="panel-heading">Devices</div>
 					<ul>
 					{items}
 						</ul>
@@ -52,11 +53,11 @@ var Ranking = React.createClass({
 
 		_.each( r , function (obj ,i ) {
 			items[i] = (	<li  className={obj.last ? 'Last':  'new'}>
-								<div class="bloder"> {obj.name}</div>
+								<div class="name"> {obj.name}</div>
 								<div>{obj.result}</div>
 							</li>);
 		});
-		return (<div className="Ranking"><ul>{items}</ul> </div>);
+		return (<div className="Ranking panel panel-default"><ul>{items}</ul> </div>);
 	}
 });
 
@@ -104,14 +105,13 @@ var Start = React.createClass({
 			this.setState({state:0});
 	},
 	render: function() {
-
 		var className  = this.state.state === 0 ? 'visible' :'hidden ';
 		var className2  = this.state.state !== 0 ? 'visible' :'hidden ';
 		var btnClass =  [className, 'btn'].join(" ");
 		var formClass =  [className, 'form'].join(" ");
 		var timerClassName =  [className2, 'timer'].join(" ");
 		var result =  [className2, 'Curren'].join(" ");
-		return (<div className="Start">
+		return (<div className="Start panel panel-default">
 				<div className={formClass}>
 					<label>
 					    Name :
@@ -121,7 +121,7 @@ var Start = React.createClass({
 					   Time :
 						<input type="text" value={this.state.time} onChange={this.handleTime}/>
 					</label>
-					<div  className={btnClass} onClick={this.start}>  Start</div>
+					<button  className={btnClass} onClick={this.start}>  Start</button>
 
 				</div>
 				<div className={timerClassName}>  {this.state.timer} </div>
