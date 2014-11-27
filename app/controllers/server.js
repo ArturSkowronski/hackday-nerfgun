@@ -12,6 +12,7 @@ var serverDevice;
 exports.addDevice = function(socket) {
 	console.log('mobile device added!');
 	devices[socket.id] = socket;
+	exports.sendDeviceList();
 }
 
 exports.registerServer = function(socket) {
