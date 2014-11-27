@@ -5,6 +5,9 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title></title>
 	<script src="scripts/jquery.min.js"></script>
+	<script src="scripts/math.js"></script>
+	<script src="scripts/shoot.js"></script>
+	<script src="scripts/smoothie.js"></script>
 	<script src="https://cdn.socket.io/socket.io-1.2.1.js"></script>
 	<script >
 		Window.socket = io('http://localhost:3000');
@@ -34,12 +37,13 @@
 <audio class="audio-hidden" id="sad_trombone" src="media/snd/2/Sad Trombone.mp3" preload="auto" controls="" />
 <audio class="audio-hidden" id="siren" src="media/snd/2/siren.mp3" preload="auto" controls="" />
 <audio class="audio-hidden" id="game_over" src="media/snd/game_over.mp3" preload="auto" controls="" />
+<audio class="audio-hidden" id="chuck-audio" src="media/snd/chuck.mp3" preload="auto" controls="" />
 
 <script>
 	$(document).ready(function() {
 		var i = document.getElementById("game-app");
 
-		var img1 = ['media/img/1/grandma.png', 'media/img/1/kitten.png', 'media/img/1/kubus.jpg', 'media/img/1/woman.png'];
+		var img1 = ['media/img/1/grandma.png', 'media/img/1/kitten.png', 'media/img/1/kubus.jpg', 'media/img/1/woman.png', 'media/img/1/dragan.png'];
 		var img2 = ['media/img/2/bowser.png', 'media/img/2/demon.png', 'media/img/2/devil.gif', 'media/img/2/hoogan.png', 'media/img/2/justin.png', 'media/img/2/orc.png', 'media/img/2/pure-evil.png', 'media/img/2/putin.png', 'media/img/2/soldier.png'];
 		var misc = ['media/img/cracked.png', 'media/img/norris.gif'];
 
@@ -79,30 +83,10 @@
 		connection.emit('mobile:register', {});
 
 		function ping(score) {
-			console.log('ping');
 			connection.emit('mobile:ping', {
 				score: score
 			});
 		}
-
-		connection.on('mobile:type', function(data){
-			console.log('got type', data.type);
-			window.type = data.type;
-			if(data.type === 1) {
-				good();
-			}
-			if(data.type === 2) {
-				bad();
-			}
-			if(data.type === 3) {
-				norris();
-			}
-		});
-
-		connection.on('mobile:stop', function(data){
-			console.log('got stop!');
-			gameover();
-		});
 
 		function randm(maximum) {
 			return Math.floor(Math.random() * (maximum - 0 + 1));
@@ -113,7 +97,7 @@
 			console.log(img1[index]);
 			console.log(index);
 			$("#game-app").css("background-image", 'url(' + img1[index] + ')');
-			$("#game-app").css("background-color", 'green');
+			$("#game-app").css("background-color", '#00dd00');
 		}
 
 		function bad() {
@@ -143,7 +127,8 @@
 				cont.play();
 			}
 			if(window.type === 3) {
-				//TODO:!
+				var chuck = document.getElementById('chuck-audio');
+				chuck.play();
 			}
 		}
 
@@ -152,16 +137,52 @@
 			$("#game-app").css("background-color", 'pink');
 
 			playSound();
+
+			if(window.type == 1) {
+				ping(-1);
+			}
+			if(window.type == 2) {
+				ping(1);
+			}
+			if(window.type == 3) {
+				ping(-50);
+			}
 		}
 
+		shootjs(hit);
+
+
+		window.type = 1;
+		good();
 		$("#game-app").on("click", function() {
 			hit();
+		});
+
+
+
+		connection.on('mobile:type', function(data){
+			console.log('got type', data.type);
+			window.type = data.type;
+			if(data.type === 1) {
+				good();
+			}
+			if(data.type === 2) {
+				bad();
+			}
+			if(data.type === 3) {
+				norris();
+			}
+		});
+
+		connection.on('mobile:stop', function(data){
+			console.log('got stop!');
+			gameover();
 		});
 
 		function gameover() {
 			$("#game-app").hide();
 			$("#game-over").show();
-			var glassBreak = document.getElementById("glass-break");
+			var glassBreak = document.getElementById("game_over");
 			glassBreak.play();
 		}
 	});
