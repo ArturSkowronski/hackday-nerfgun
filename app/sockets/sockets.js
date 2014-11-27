@@ -19,6 +19,7 @@ module.exports = function(app) {
 			controller.sendDeviceList();
 		});
 
+
 		socket.on('app:getDeviceList', function (data) {
 			controller.sendDeviceList();
 		});

@@ -97,6 +97,7 @@ exports.sendResult = function() {
 }
 
 exports.stop = function() {
+
 	if(serverDevice !== undefined) {
 		console.log('stop');
 
@@ -105,7 +106,6 @@ exports.stop = function() {
 			name: name,
 			result: result
 		});
-
 
 		//for each device, send stop
 		for (var k in devices){
@@ -122,6 +122,7 @@ exports.stop = function() {
 			result: results
 		})
 	}
+
 }
 
 exports.removeDevice = function(id) {

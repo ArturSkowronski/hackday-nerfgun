@@ -4,3 +4,21 @@
 .btn {
 	cursor : pointer;
 }
+
+
+.Ranking ul li  div{
+	float: left;
+
+}
+
+.Ranking ul li div.name{
+	padding-right: 10px;
+	font-weight: bold;
+	display: block;
+
+}
+
+
+.Ranking ul li.last  {
+	color : red;
+}

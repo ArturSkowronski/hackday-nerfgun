@@ -1,8 +1,3 @@
-var UserForm = React.createClass({
-	render: function() {
-		return (<div className="User_Form"> </div>);
-	}
-});
 
 var Devices = React.createClass({
 	getInitialState: function () {
@@ -11,9 +6,11 @@ var Devices = React.createClass({
 		};
 	},
 	componentDidMount :   function () {
-		Window.socket.on('device_list', function (data) {
+		var self = this;
+		Window.socket.emit('app:getDeviceList', {});
+		Window.socket.on('app:deviceList', function (data) {
 			console.log(data);
-			this.setState({ devices : data});
+				self.setState({ devices : data.devices});
 		});
 	},
 
@@ -22,15 +19,48 @@ var Devices = React.createClass({
 		_.each( this.state.devices , function (obj ,i ) {
 			items[i] = (	<li>{obj}</li>);
 		});
-		return (<div className="Devices">
+		return (<div className="Devices panel panel-default ">
+					<div className="panel-heading">Devices</div>
+					<ul>
 					{items}
+						</ul>
 		      </div>);
 	}
 });
 
 var Ranking = React.createClass({
+	getInitialState: function () {
+		return {
+			ranking : []
+		};
+	},
+	componentDidMount :   function () {
+		var self = this;
+
+		Window.socket.on('app:getResult', {});
+		Window.socket.on('app:result', function (data) {
+			 console.log(data);
+			self.setState({ ranking : data.result});
+		});
+
+	},
 	render: function() {
-		return (<div className="Ranking"> </div>);
+		var  items = []
+		if(this.state.ranking.length>0)
+			this.state.ranking[this.state.ranking.length-1].last = true ;
+		var r  = this.state.ranking;
+		_.sortBy(r,function(n){ return n.result; });
+
+		_.each( r , function (obj ,i ) {
+			items[i] = (	<li  className={obj.last ? 'Last':  'new'}>
+								<div class="name"> {obj.name}</div>
+								<div>{obj.result}</div>
+							</li>);
+		});
+		return (<div className="Ranking panel panel-default ">
+			<div className="panel-heading">Results</div>
+			<ul>{items}</ul>
+		</div>);
 	}
 });
 
@@ -39,14 +69,24 @@ var Start = React.createClass({
 		return {
 			name : '',
 			time : 3000,
-			state: 0
+			state: 0,
+			timer : 0,
+			currentResult : 0
 		};
 	},
-	start  :   function ()  {
-		this.setState({state: 1});
+	componentDidMount :   function () {
+		var self = this;
+		Window.socket.on('app:ping', function (data) {
+			self.setState({ currentResult : data});
+		});
+	},
 
+	start  :   function ()  {
+		this.state.timer= this.state.time;
+		this.setState({state: 1 } );
 		if(this.state.state!= 1){
-			Window.socket.emit('app:start', {name: this.props.name} );
+			Window.socket.emit('app:start', { name: this.state.name} );
+			this.updateTime();
 		}
 	},
 	handleTime :  function (e)  {
@@ -55,12 +95,26 @@ var Start = React.createClass({
 	handleName  :   function (e)  {
 		this.setState({name: e.target.value});
 	},
+	updateTime : function ()  {
+		this.setState({timer : (this.state.timer -1)})
+		if (this.state.timer <= 0) {
+			this.stopT();
+		}else{
+			window.setTimeout(this.updateTime,  1);
+		}
+	},
+	stopT  : function  ()  {
+			Window.socket.emit('app:stop',{});
+			this.setState({state:0});
+	},
 	render: function() {
 		var className  = this.state.state === 0 ? 'visible' :'hidden ';
+		var className2  = this.state.state !== 0 ? 'visible' :'hidden ';
 		var btnClass =  [className, 'btn'].join(" ");
 		var formClass =  [className, 'form'].join(" ");
-
-		return (<div className="Start">
+		var timerClassName =  [className2, 'timer'].join(" ");
+		var result =  [className2, 'Curren'].join(" ");
+		return (<div className="Start row">
 				<div className={formClass}>
 					<label>
 					    Name :
@@ -70,21 +124,29 @@ var Start = React.createClass({
 					   Time :
 						<input type="text" value={this.state.time} onChange={this.handleTime}/>
 					</label>
-					<div  className={btnClass} onClick={this.start}>  Start</div>
+					<button  className={btnClass} onClick={this.start}>  Start</button>
+
 				</div>
+				<div className={timerClassName}>  {this.state.timer} </div>
+			    <div className={result}>  {this.state.currentResult} </div>
 		</div>);
 	}
 });
 
 var App = React.createClass({
-
 	 componentDidMount :   function () {
-		 Window.socket.emit('app:register');
+
 	 },
 		render: function() {
 			return (<div>
-					 <Devices/>
+
+
 						<Start />
+				<div className="row">
+					<Devices  className="col-md-6" />
+					<Ranking  className="col-md-6"/>
+				</div>
+
 					</div>
 			);
 		}
