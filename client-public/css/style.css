@@ -6,19 +6,26 @@
 }
 
 
-.Ranking ul li  div{
+.Ranking ul li  span {
 	float: left;
-
-}
-
-.Ranking ul li div.name{
-	padding-right: 10px;
-	font-weight: bold;
 	display: block;
-
 }
 
+.Ranking ul li span.name{
+	font-weight: bold;
+
+}
 
 .Ranking ul li.last  {
 	color : red;
+}
+.RRRR  {
+	margin: 10px;
+	font-size: 30px;
+	color: red;
+
+}
+
+.Start {
+	margin: 10px 0;
 }
