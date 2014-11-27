@@ -1,4 +1,5 @@
 'use strict';
+'use strict';
 
 var request = require('request');
 
@@ -79,10 +80,10 @@ module.exports = function (grunt) {
         });
     }, 500);
   });
-  
+
   grunt.registerTask('default', [
     'sass',
-    'develop', 
+    'develop',
     'watch'
   ]);
 };
