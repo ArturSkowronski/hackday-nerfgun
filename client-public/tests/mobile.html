@@ -12,7 +12,7 @@
 
 <script>
 	console.log('connecting');
-	var connection = io.connect();
+	var connection = io.connect("http://192.168.21.129:3000/static/mobile.html");
 
 	function register() {
 		console.log('register');

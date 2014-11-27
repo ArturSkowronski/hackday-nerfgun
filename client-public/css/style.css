@@ -6,10 +6,7 @@
 }
 
 
-.Ranking ul li  span {
-	float: left;
-	display: block;
-}
+
 
 .Ranking ul li span.name{
 	font-weight: bold;

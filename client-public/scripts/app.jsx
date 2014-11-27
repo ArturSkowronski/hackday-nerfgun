@@ -77,7 +77,7 @@ var Start = React.createClass({
 	componentDidMount :   function () {
 		var self = this;
 		Window.socket.on('app:ping', function (data) {
-			self.setState({ currentResult : data});
+			self.setState({ currentResult : data.result});
 		});
 	},
 

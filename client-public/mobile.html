@@ -88,6 +88,14 @@
 			});
 		}
 
+		function killAudio() {
+			$('audio').each(function (self) {
+				this.stop();
+				this.pause();
+				this.currentTime = 0;
+			});
+		}
+
 		function randm(maximum) {
 			return Math.floor(Math.random() * (maximum - 0 + 1));
 		}
@@ -114,6 +122,7 @@
 		}
 
 		function playSound() {
+			//killAudio();
 			if(window.type === 1) {
 				var index = randm(sounds2.length-1);
 
@@ -133,7 +142,7 @@
 		}
 
 		function hit() {
-			$("#game-app").css("background-image", 'none');
+			$("#game-app").css("background-image", 'url(media/img/boom-logo.png)');
 			$("#game-app").css("background-color", 'pink');
 
 			playSound();
