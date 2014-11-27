@@ -15,18 +15,22 @@
 		});
 	</script>
 	<link rel="stylesheet" type="text/css" href="css/mobile-style.css"></link>
+	<link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
 </head>
 <body>
-<div id="app">
+<div id="game-app" class="app">
 	&nbsp;
 </div>
+<div id="game-over" class="app">
+	<h1>GAME OVER!</h1>
+</div>
 
-<audio class="audio-hidden" id="glass-break" src="audio/breakeglass.mp3" preload="auto">
+<audio class="audio-hidden" id="glass-break" src="audio/breakeglass.mp3" preload="auto" controls="">
 
 
 <script>
 	$(document).ready(function() {
-		var i = document.getElementById("app");
+		var i = document.getElementById("game-app");
 
 		// go full-screen
 		if (i.requestFullscreen) {
@@ -60,15 +64,18 @@
 
 		connection.on('mobile:stop', function(data){
 			console.log('got stop!');
+			gameover();
 		});
 
-		$("#app").on("click", function() {
+
+		$("#game-app").on("click", function() {
+			console.log('clock click');
 			gameover();
 		})
 
 		function gameover() {
-			$("#app").css("background-color", "white");
-			$("#app").css("background-image", "url('http://dc524.4shared.com/img/eWrpaJaE/s3/135ec968570/cracked-screen-psd79408.png')");
+			$("#game-app").hide();
+			$("#game-over").show();
 			var glassBreak = document.getElementById("glass-break");
 			glassBreak.play();
 		}
