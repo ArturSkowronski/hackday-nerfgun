@@ -13,7 +13,6 @@ html, body {
 	min-height: 100%;
 	background-color: blue;
 	background-size: contain;
-	background-image: url('http://fc00.deviantart.net/fs10/f/2006/097/a/5/ChuckNorrisT.gif');
 	background-repeat: no-repeat;
 	background-position: center;
 }
@@ -21,7 +20,7 @@ html, body {
 #game-over {
 	display: none;
 	background-color: white;
-	background-image: url(http://dc524.4shared.com/img/eWrpaJaE/s3/135ec968570/cracked-screen-psd79408.png);
+	background-image: url('../media/img/cracked.png');
 }
 
 .audio-hidden {

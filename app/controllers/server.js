@@ -69,7 +69,8 @@ exports.ping = function(socket, data) {
 
 		//send info to a server
 		serverDevice.emit('app:ping', {
-			id: socket.id
+			id: socket.id,
+			result: result
 		});
 	}
 }

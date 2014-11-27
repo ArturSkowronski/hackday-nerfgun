@@ -6,13 +6,9 @@
 	<title></title>
 	<script src="scripts/jquery.min.js"></script>
 	<script src="https://cdn.socket.io/socket.io-1.2.1.js"></script>
-	<script src="scripts/audio.min.js"></script>
 	<script >
 		Window.socket = io('http://localhost:3000');
 
-		audiojs.events.ready(function() {
-			var as = audiojs.createAll();
-		});
 	</script>
 	<link rel="stylesheet" type="text/css" href="css/mobile-style.css"></link>
 	<link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
@@ -25,12 +21,35 @@
 	<h1>GAME OVER!</h1>
 </div>
 
-<audio class="audio-hidden" id="glass-break" src="audio/breakeglass.mp3" preload="auto" controls="">
-
+<audio class="audio-hidden" id="glass-break" src="audio/breakeglass.mp3" preload="auto" controls="" />
+<audio class="audio-hidden" id="excellent" src="media/snd/1/excellent.wav" preload="auto" controls="" />
+<audio class="audio-hidden" id="headshot" src="media/snd/1/headshot.wav" preload="auto" controls="" />
+<audio class="audio-hidden" id="killingspree" src="media/snd/1/killingspree.wav" preload="auto" controls="" />
+<audio class="audio-hidden" id="smb_coin" src="media/snd/1/smb_coin.wav" preload="auto" controls="" />
+<audio class="audio-hidden" id="termination" src="media/snd/1/termination.wav" preload="auto" controls="" />
+<audio class="audio-hidden" id="mario_lost_a_life" src="media/snd/2/mario_lost_a_life.mp3" preload="auto" controls="" />
+<audio class="audio-hidden" id="game_over" src="media/snd/game_over.mp3" preload="auto" controls="" />
 
 <script>
 	$(document).ready(function() {
 		var i = document.getElementById("game-app");
+
+		var img1 = ['media/img/1/grandma.png', 'media/img/1/kitten.png', 'media/img/1/kubus.jpg', 'media/img/1/woman.png'];
+		var img2 = ['media/img/2/bowser.png', 'media/img/2/demon.png', 'media/img/2/devil.gif', 'media/img/2/hoogan.png', 'media/img/2/justin.png', 'media/img/2/orc.png', 'media/img/2/pure-evil.png', 'media/img/2/putin.png', 'media/img/2/soldier.png'];
+		var misc = ['media/img/cracked.png', 'media/img/norris.gif'];
+
+		var images = [];
+
+		function preload(imgs) {
+			for (i = 0; i < imgs.length; i++) {
+				images[i] = new Image()
+				images[i].src = imgs[i]
+			}
+		}
+
+		preload(img1);
+		preload(img2);
+		preload(misc);
 
 		// go full-screen
 		if (i.requestFullscreen) {
@@ -60,12 +79,31 @@
 
 		connection.on('mobile:type', function(data){
 			console.log('got type', data.type);
+			if(data.type === 1) {
+				good();
+			}
+			if(data.type === 2) {
+				bad();
+			}
+			if(data.type === 3) {
+				norris();
+			}
 		});
 
 		connection.on('mobile:stop', function(data){
 			console.log('got stop!');
 			gameover();
 		});
+
+		function randm(maximum) {
+			return Math.floor(Math.random() * (maximum - 0 + 1));
+		}
+
+
+		function good() {
+			int index = randm(img1.length);
+			$("#game-app").css("background-image")
+		}
 
 
 		$("#game-app").on("click", function() {
