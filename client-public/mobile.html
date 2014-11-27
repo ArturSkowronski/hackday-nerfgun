@@ -27,7 +27,12 @@
 <audio class="audio-hidden" id="killingspree" src="media/snd/1/killingspree.wav" preload="auto" controls="" />
 <audio class="audio-hidden" id="smb_coin" src="media/snd/1/smb_coin.wav" preload="auto" controls="" />
 <audio class="audio-hidden" id="termination" src="media/snd/1/termination.wav" preload="auto" controls="" />
+<audio class="audio-hidden" id="tada" src="media/snd/1/tada.wav" preload="auto" controls="" />
+<audio class="audio-hidden" id="scary" src="media/snd/1/Scary Scream-SoundBible.com-1115384336.wav" preload="auto" controls="" />
 <audio class="audio-hidden" id="mario_lost_a_life" src="media/snd/2/mario_lost_a_life.mp3" preload="auto" controls="" />
+<audio class="audio-hidden" id="peronas_laugh" src="media/snd/2/peronas_laugh.mp3" preload="auto" controls="" />
+<audio class="audio-hidden" id="sad_trombone" src="media/snd/2/Sad Trombone.mp3" preload="auto" controls="" />
+<audio class="audio-hidden" id="siren" src="media/snd/2/siren.mp3" preload="auto" controls="" />
 <audio class="audio-hidden" id="game_over" src="media/snd/game_over.mp3" preload="auto" controls="" />
 
 <script>
@@ -37,6 +42,9 @@
 		var img1 = ['media/img/1/grandma.png', 'media/img/1/kitten.png', 'media/img/1/kubus.jpg', 'media/img/1/woman.png'];
 		var img2 = ['media/img/2/bowser.png', 'media/img/2/demon.png', 'media/img/2/devil.gif', 'media/img/2/hoogan.png', 'media/img/2/justin.png', 'media/img/2/orc.png', 'media/img/2/pure-evil.png', 'media/img/2/putin.png', 'media/img/2/soldier.png'];
 		var misc = ['media/img/cracked.png', 'media/img/norris.gif'];
+
+		var sounds1 = ['excellent', 'headshot', 'killingspree', 'smb_coin', 'termination', 'tada', 'scary'];
+		var sounds2 = ['mario_lost_a_life', 'peronas_laugh', 'sad_trombone', 'siren'];
 
 		var images = [];
 
@@ -79,6 +87,7 @@
 
 		connection.on('mobile:type', function(data){
 			console.log('got type', data.type);
+			window.type = data.type;
 			if(data.type === 1) {
 				good();
 			}
@@ -99,17 +108,55 @@
 			return Math.floor(Math.random() * (maximum - 0 + 1));
 		}
 
-
 		function good() {
-			int index = randm(img1.length);
-			$("#game-app").css("background-image")
+			var index = randm(img1.length-1);
+			console.log(img1[index]);
+			console.log(index);
+			$("#game-app").css("background-image", 'url(' + img1[index] + ')');
+			$("#game-app").css("background-color", 'green');
 		}
 
+		function bad() {
+			var index = randm(img2.length-1);
+			console.log(img2[index]);
+			console.log(index);
+			$("#game-app").css("background-image", 'url(' + img2[index] + ')');
+			$("#game-app").css("background-color", 'red');
+		}
+
+		function chuck() {
+			$("#game-app").css("background-image", 'url(media/img/norris.gif)');
+			$("#game-app").css("background-color", 'blue');
+		}
+
+		function playSound() {
+			if(window.type === 1) {
+				var index = randm(sounds2.length-1);
+
+				var cont = document.getElementById(sounds2[index]);
+				cont.play();
+			}
+			if(window.type === 2) {
+				var index = randm(sounds1.length-1);
+
+				var cont = document.getElementById(sounds1[index]);
+				cont.play();
+			}
+			if(window.type === 3) {
+				//TODO:!
+			}
+		}
+
+		function hit() {
+			$("#game-app").css("background-image", 'none');
+			$("#game-app").css("background-color", 'pink');
+
+			playSound();
+		}
 
 		$("#game-app").on("click", function() {
-			console.log('clock click');
-			gameover();
-		})
+			hit();
+		});
 
 		function gameover() {
 			$("#game-app").hide();
