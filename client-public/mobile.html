@@ -10,7 +10,7 @@
 	<script src="scripts/smoothie.js"></script>
 	<script src="https://cdn.socket.io/socket.io-1.2.1.js"></script>
 	<script >
-		Window.socket = io('http://localhost:3000');
+		Window.socket = io('http://192.168.21.129:3000');
 
 	</script>
 	<link rel="stylesheet" type="text/css" href="css/mobile-style.css"></link>
@@ -161,6 +161,8 @@
 		connection.on('mobile:type', function(data){
 			console.log('got type', data.type);
 			window.type = data.type;
+			$("#game-app").show();
+			$("#game-over").hide();
 			if(data.type === 1) {
 				good();
 			}
@@ -168,7 +170,7 @@
 				bad();
 			}
 			if(data.type === 3) {
-				norris();
+				chuck();
 			}
 		});
 

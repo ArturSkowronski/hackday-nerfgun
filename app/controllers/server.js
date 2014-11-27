@@ -9,6 +9,8 @@ var results = [];
 
 var serverDevice;
 
+var interval = null;
+
 exports.addDevice = function(socket) {
 	console.log('mobile device added!');
 	devices[socket.id] = socket;
@@ -22,11 +24,11 @@ exports.registerServer = function(socket) {
 
 exports.random = function() {
 	var val = Math.random();
-	if(val < 0.33 ) {
+	if(val < 0.25 ) {
 		console.log('1');
 		return 1;
 	}
-	if(val < 0.66) {
+	if(val < 0.80) {
 		console.log('2');
 		return 2;
 	}
@@ -50,6 +52,8 @@ exports.sendDeviceList = function() {
 	}
 }
 
+currentIndex = 0;
+
 exports.start = function(data) {
 	console.log('start!');
 	name = data.name;
@@ -66,25 +70,50 @@ exports.start = function(data) {
 			});
 		}
 	}
+
+	interval = setInterval(exports.change, 5000);
+	currentIndex = 0;
+}
+
+
+exports.change = function() {
+	var index = 0;
+	var done = false;
+	for (var k in devices){
+		if (devices.hasOwnProperty(k)) {
+			if(currentIndex == index){
+				devices[k].emit('mobile:type', {
+					type: exports.random()
+				});
+				done = true;
+				break;
+			}
+			index++;
+		}
+	}
+	if(!done) {
+		currentIndex = 0;
+	}
 }
 
 exports.ping = function(socket, data) {
-	if(serverDevice !== undefined) {
+	if(serverDevice !== undefined && running) {
 		console.log('got ping!!');
 		console.log(data.score);
 
 		result += data.score;
 
 		//send new type
-		//TODO: different type
+		console.log('sending another one');
+		console.log(socket.id);
 		devices[socket.id].emit('mobile:type', {
-			type: Math.random()
+			type: exports.random()
 		});
 
 		//send info to a server
 		serverDevice.emit('app:ping', {
 			id: socket.id,
-			result: exports.random()
+			result: result
 		});
 	}
 }
@@ -123,6 +152,7 @@ exports.stop = function() {
 		})
 	}
 
+	clearInterval(interval);
 }
 
 exports.removeDevice = function(id) {
