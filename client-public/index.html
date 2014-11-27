@@ -3,19 +3,29 @@
 
 	</head>
 	<body>
-		<script src="https://cdn.socket.io/socket.io-1.2.1.js"></script>
+		<script src="//cdn.socket.io/socket.io-1.2.1.js"></script>
 
 		<script>
-			var socket = io.connect('http://localhost:3000');
-			socket.emit('hello', { my: 'data' });
-			socket.on('news', function (data) {
-				console.log(data);
+			console.log('connecting');
+			var connection = io.connect();
 
-			});
-			socket.on('news', function (data) {
-				console.log(data);
+			// Emit ready event.
+			connection.emit('ready');
+			console.log('ready emmited!');
 
+			// Listen for the talk event.
+			connection.on('talk', function(data) {
+				console.log('talking like shiat!');
+				console.log(data.message)
 			});
+
+			connection.on('new visitor', function(data){
+				console.log('got broadcast!');
+			});
+
+			console.log(connection);
+
+
 		</script>
 	</body>
 </html>

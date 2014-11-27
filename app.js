@@ -10,6 +10,9 @@ var users = require('./routes/user');
 
 var app = express();
 
+/// fire express io!
+app.http().io();
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -28,9 +31,6 @@ app.use('/users', users);
 
 /// client side phones
 app.use('/static', express.static(__dirname + '/client-public'));
-
-/// sockets
-require('./app/sockets/sockets')(app);
 
 /// catch 404 and forward to error handler
 app.use(function(req, res, next) {
