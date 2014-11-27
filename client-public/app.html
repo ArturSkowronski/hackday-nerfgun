@@ -8,13 +8,14 @@
 	<script src="https://cdn.socket.io/socket.io-1.2.1.js"></script>
 	<script >
 		Window.socket = io('http://localhost:3000');
+		Window.socket.emit('app:register');
 	</script>
 	<script src="scripts/react.js"> </script>
 	<script src="scripts/JSXTransformer.js"> </script>
 	<script src="scripts/underscore.js"> </script>
 	<script type="text/jsx" src="scripts/app.jsx"> </script>
-	<link rel="stylesheet" href="css/bootstrap-theme.min.css"> </link>
-	<link rel="stylesheet"href="css/style.css"> </link>
+	<link rel="stylesheet" type="text/css" href="css/bootstrap-theme.min.css"> </link>
+	<link rel="stylesheet" type="text/css" href="css/style.css"> </link>
 </head>
 <body>
    <div id="app">

@@ -4,3 +4,14 @@
 .btn {
 	cursor : pointer;
 }
+
+
+.Ranking ul li  div{
+
+	float: left;
+}
+
+.Ranking ul li div.name{
+
+	font-weight: bold;
+}

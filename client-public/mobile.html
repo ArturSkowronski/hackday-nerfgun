@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title></title>
+	<script src="scripts/jquery.min.js"></script>
+	<script src="https://cdn.socket.io/socket.io-1.2.1.js"></script>
+	<script src="scripts/audio.min.js"></script>
+	<script >
+		Window.socket = io('http://localhost:3000');
+
+		audiojs.events.ready(function() {
+			var as = audiojs.createAll();
+		});
+	</script>
+	<link rel="stylesheet" type="text/css" href="css/mobile-style.css"></link>
+</head>
+<body>
+<div id="app">
+	&nbsp;
+</div>
+
+<audio class="audio-hidden" id="glass-break" src="audio/breakeglass.mp3" preload="auto">
+
+
+<script>
+	$(document).ready(function() {
+		var i = document.getElementById("app");
+
+		// go full-screen
+		if (i.requestFullscreen) {
+			i.requestFullscreen();
+		} else if (i.webkitRequestFullscreen) {
+			i.webkitRequestFullscreen();
+		} else if (i.mozRequestFullScreen) {
+			i.mozRequestFullScreen();
+		} else if (i.msRequestFullscreen) {
+			i.msRequestFullscreen();
+		} else {
+			console.log('no fullscreen :(');
+		}
+
+
+		console.log('connecting');
+		var connection = io.connect();
+
+		connection.emit('mobile:register', {});
+
+		function ping(score) {
+			console.log('ping');
+			connection.emit('mobile:ping', {
+				score: score
+			});
+		}
+
+		connection.on('mobile:type', function(data){
+			console.log('got type', data.type);
+		});
+
+		connection.on('mobile:stop', function(data){
+			console.log('got stop!');
+		});
+
+		$("#app").on("click", function() {
+			gameover();
+		})
+
+		function gameover() {
+			$("#app").css("background-color", "white");
+			$("#app").css("background-image", "url('http://dc524.4shared.com/img/eWrpaJaE/s3/135ec968570/cracked-screen-psd79408.png')");
+			var glassBreak = document.getElementById("glass-break");
+			glassBreak.play();
+		}
+	});
+</script>
+</body>
+</html>

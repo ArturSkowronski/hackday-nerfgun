@@ -1,8 +1,3 @@
-var UserForm = React.createClass({
-	render: function() {
-		return (<div className="User_Form"> </div>);
-	}
-});
 
 var Devices = React.createClass({
 	getInitialState: function () {
@@ -11,11 +6,11 @@ var Devices = React.createClass({
 		};
 	},
 	componentDidMount :   function () {
-		Window.socket.emit('getDeviceList', {});
-		Window.socket.on('deviceList', function (data) {
-			alert(1);
+		var self = this;
+		Window.socket.emit('app:getDeviceList', {});
+		Window.socket.on('app:deviceList', function (data) {
 			console.log(data);
-			this.setState({ devices : data});
+				self.setState({ devices : data.devices});
 		});
 	},
 
@@ -25,7 +20,9 @@ var Devices = React.createClass({
 			items[i] = (	<li>{obj}</li>);
 		});
 		return (<div className="Devices">
+					<ul>
 					{items}
+						</ul>
 		      </div>);
 	}
 });
@@ -37,19 +34,29 @@ var Ranking = React.createClass({
 		};
 	},
 	componentDidMount :   function () {
-		Window.socket.on('result', function (data) {
-			this.setState({ ranking : data});
+		var self = this;
+
+		Window.socket.on('app:getResult', {});
+		Window.socket.on('app:result', function (data) {
+			 console.log(data);
+			self.setState({ ranking : data.result});
 		});
+
 	},
 	render: function() {
 		var  items = []
-		_.each( this.state.ranking , function (obj ,i ) {
-			items[i] = (	<li>
+		if(this.state.ranking.length>0)
+			this.state.ranking[this.state.ranking.length-1].last = true ;
+		var r  = this.state.ranking;
+		_.sortBy(r,function(n){ return n.result; });
+
+		_.each( r , function (obj ,i ) {
+			items[i] = (	<li  className={obj.last ? 'Last':  'new'}>
 								<div class="bloder"> {obj.name}</div>
 								<div>{obj.result}</div>
 							</li>);
 		});
-		return (<div className="Ranking">{items} </div>);
+		return (<div className="Ranking"><ul>{items}</ul> </div>);
 	}
 });
 
@@ -59,14 +66,22 @@ var Start = React.createClass({
 			name : '',
 			time : 3000,
 			state: 0,
-			timer : 0
+			timer : 0,
+			currentResult : 0
 		};
 	},
+	componentDidMount :   function () {
+		var self = this;
+		Window.socket.on('app:ping', function (data) {
+			self.setState({ currentResult : data});
+		});
+	},
+
 	start  :   function ()  {
 		this.state.timer= this.state.time;
 		this.setState({state: 1 } );
 		if(this.state.state!= 1){
-			Window.socket.emit('app:start', {name: this.props.name} );
+			Window.socket.emit('app:start', { name: this.state.name} );
 			this.updateTime();
 		}
 	},
@@ -77,7 +92,6 @@ var Start = React.createClass({
 		this.setState({name: e.target.value});
 	},
 	updateTime : function ()  {
-		console.log(1);
 		this.setState({timer : (this.state.timer -1)})
 		if (this.state.timer <= 0) {
 			this.stopT();
@@ -96,6 +110,7 @@ var Start = React.createClass({
 		var btnClass =  [className, 'btn'].join(" ");
 		var formClass =  [className, 'form'].join(" ");
 		var timerClassName =  [className2, 'timer'].join(" ");
+		var result =  [className2, 'Curren'].join(" ");
 		return (<div className="Start">
 				<div className={formClass}>
 					<label>
@@ -110,18 +125,20 @@ var Start = React.createClass({
 
 				</div>
 				<div className={timerClassName}>  {this.state.timer} </div>
+			    <div className={result}>  {this.state.currentResult} </div>
 		</div>);
 	}
 });
 
 var App = React.createClass({
 	 componentDidMount :   function () {
-		 Window.socket.emit('app:register');
+
 	 },
 		render: function() {
 			return (<div>
 					 <Devices/>
 						<Start />
+						<Ranking/>
 					</div>
 			);
 		}

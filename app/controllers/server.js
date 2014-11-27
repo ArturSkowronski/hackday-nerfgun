@@ -12,6 +12,7 @@ var serverDevice;
 exports.addDevice = function(socket) {
 	console.log('mobile device added!');
 	devices[socket.id] = socket;
+	exports.sendDeviceList();
 }
 
 exports.registerServer = function(socket) {
@@ -74,7 +75,7 @@ exports.getResult = function() {
 }
 
 exports.stop = function() {
-	console.log('stop');
+	console.log('stop kurde');
 
 	running = false;
 	results.push({
@@ -91,6 +92,7 @@ exports.stop = function() {
 		}
 	}
 
+	console.log('dupiana dupa', serverDevice);
 	//send results to a server
 	serverDevice.emit('app:result', {
 		result: results
