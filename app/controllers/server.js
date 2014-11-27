@@ -10,14 +10,17 @@ var results = [];
 var serverDevice;
 
 exports.addDevice = function(socket) {
+	console.log('mobile device added!');
 	devices[socket.id] = socket;
 }
 
 exports.registerServer = function(socket) {
+	console.log('server device added!');
 	serverDevice = socket;
 }
 
 exports.sendDeviceList = function() {
+	console.log('sending device list!');
 	var ids = [];
 	for (var k in devices){
 		if (devices.hasOwnProperty(k)) {
@@ -31,6 +34,7 @@ exports.sendDeviceList = function() {
 }
 
 exports.start = function(data) {
+	console.log('start!');
 	name = data.name;
 
 	running = true;
@@ -48,6 +52,9 @@ exports.start = function(data) {
 }
 
 exports.ping = function(socket, data) {
+	console.log('got ping!!');
+	console.log(data.score);
+
 	result += data.score;
 
 	//send new type
@@ -67,6 +74,8 @@ exports.getResult = function() {
 }
 
 exports.stop = function() {
+	console.log('stop');
+
 	running = false;
 	results.push({
 		name: name,
@@ -89,5 +98,6 @@ exports.stop = function() {
 }
 
 exports.removeDevice = function(id) {
+	console.log('remove device');
 	delete devices[id];
 }

@@ -1,0 +1,54 @@
+<html>
+<head>
+
+</head>
+<body>
+<h1>Server</h1>
+<button onclick="register()">Register</button>
+<button onclick="start()">Start</button>
+<button onclick="stop()">Stop</button>
+<button onclick="getDeviceList()">Device list</button>
+
+<script src="//cdn.socket.io/socket.io-1.2.1.js"></script>
+
+<script>
+	console.log('connecting');
+	var connection = io.connect();
+
+	function register() {
+		connection.emit('app:register', {});
+	}
+
+	function start() {
+		connection.emit('app:start', {
+			name: 'Dupowski Dupek'
+		});
+	}
+
+	function stop() {
+		connection.emit('app:stop', {});
+	}
+
+	function getDeviceList() {
+		connection.emit('app:getDeviceList', {});
+	}
+
+	connection.on('app:result', function(data) {
+		console.log('result');
+		console.log(data);
+	})
+
+	connection.on('app:ping', function(data) {
+		console.log('ping');
+		console.log(data);
+	})
+
+
+	connection.on('app:deviceList', function(data) {
+		console.log('deviceList');
+		console.log(data);
+	})
+
+</script>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<html>
+<head>
+
+</head>
+<body>
+<h1>Mobile</h1>
+<button onclick="register()">Register</button>
+<button onclick="ping(1)">Send +1</button>
+<button onclick="ping(-1)">Send -1</button>
+
+<script src="//cdn.socket.io/socket.io-1.2.1.js"></script>
+
+<script>
+	console.log('connecting');
+	var connection = io.connect();
+
+	function register() {
+		console.log('register');
+		connection.emit('mobile:register', {});
+	}
+
+	function ping(score) {
+		console.log('ping');
+		connection.emit('mobile:ping', {
+			score: score
+		});
+	}
+
+	connection.on('mobile:type', function(data){
+		console.log('got type', data.type);
+	});
+
+	connection.on('mobile:stop', function(data){
+		console.log('got stop!');
+	});
+
+
+</script>
+</body>
+</html>
