@@ -20,6 +20,20 @@ exports.registerServer = function(socket) {
 	serverDevice = socket;
 }
 
+exports.random = function() {
+	var val = Math.random();
+	if(val < 0.33 ) {
+		console.log('1');
+		return 1;
+	}
+	if(val < 0.66) {
+		console.log('2');
+		return 2;
+	}
+	console.log('3');
+	return 3;
+}
+
 exports.sendDeviceList = function() {
 	if(serverDevice !== undefined) {
 		console.log('sending device list!');
@@ -46,9 +60,9 @@ exports.start = function(data) {
 	//for each device, send type
 	for (var k in devices){
 		if (devices.hasOwnProperty(k)) {
-			//TODO: different types
+			console.log('sending type');
 			devices[k].emit('mobile:type', {
-				type: 0
+				type: exports.random()
 			});
 		}
 	}
@@ -64,13 +78,13 @@ exports.ping = function(socket, data) {
 		//send new type
 		//TODO: different type
 		devices[socket.id].emit('mobile:type', {
-			type: 0
+			type: Math.random()
 		});
 
 		//send info to a server
 		serverDevice.emit('app:ping', {
 			id: socket.id,
-			result: result
+			result: exports.random()
 		});
 	}
 }
